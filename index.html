@@ -1,0 +1,294 @@
+<!doctype html>
+<html lang="de" data-status="loading" data-weather="wolken" data-daytime="tag">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Cloudy – Variante A</title>
+<meta name="description" content="Cloudy – das Wetter in Hamburg, live. Studienprojekt der Kunstschule Wandsbek, keine offizielle Seite.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400..600;1,6..96,400..600&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --paper: #F3F6F9;
+    --mist: #CBD5E1;
+    --steel: #8FA3B8;
+    --slate: #4B647D;
+    --ink: #223040;
+    --line: rgba(34, 48, 64, .2);
+    --serif: "Bodoni Moda", "Didot", "Bodoni 72", Georgia, serif;
+    --sans: "Jost", "Futura", "Helvetica Neue", Arial, sans-serif;
+    --hero-img: url(img/a-cloudy-lake.jpg);
+    --veil: rgba(20, 30, 42, .42);
+  }
+  /* Kür: Nacht → Seite wird dunkel */
+  :root[data-daytime="nacht"] {
+    --paper: #151e29;
+    --mist: #223040;
+    --slate: #8FA3B8;
+    --ink: #E3E9F0;
+    --line: rgba(227, 233, 240, .16);
+    --veil: rgba(8, 13, 20, .62);
+  }
+  /* Kür: Bildwelt je Wetterlage */
+  :root[data-weather="klar"]   { --hero-img: url(img/a-clear-kenai.jpg); }
+  :root[data-weather="nebel"]  { --hero-img: url(img/a-fog-schooner.jpg); }
+  :root[data-weather="regen"]  { --hero-img: url(img/a-rain-front.jpg); }
+  :root[data-weather="schnee"] { --hero-img: url(img/a-snow-peaks.jpg); }
+
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--paper);
+    color: var(--ink);
+    font: 300 16px/1.7 var(--sans);
+    transition: background-color .8s, color .8s;
+  }
+  a { color: inherit; }
+  .label { font: 500 10.5px/1.6 var(--sans); letter-spacing: .26em; text-transform: uppercase; }
+  .serif { font-family: var(--serif); font-weight: 400; }
+
+  /* ---------- Vollbild-Hero ---------- */
+  .hero {
+    position: relative;
+    min-height: 100vh;
+    min-height: 100svh;
+    color: #F3F6F9;
+    background: var(--slate) var(--hero-img) center / cover no-repeat;
+    display: grid;
+    grid-template-rows: auto 1fr auto;
+  }
+  .hero::before {
+    content: ""; position: absolute; inset: 0;
+    background:
+      radial-gradient(ellipse 46% 42% at 50% 50%, rgba(16, 24, 34, .5), rgba(16, 24, 34, 0) 100%),
+      linear-gradient(180deg, var(--veil), rgba(20,30,42,.12) 30%, rgba(20,30,42,.12) 70%, var(--veil));
+    transition: background .8s;
+  }
+  :root[data-daytime="nacht"] .hero::before {
+    background: radial-gradient(ellipse 46% 42% at 50% 50%, rgba(6, 10, 16, .45), rgba(6, 10, 16, 0) 100%), var(--veil);
+  }
+  .hero .label { text-shadow: 0 1px 12px rgba(10, 16, 24, .55); }
+  .hero > * { position: relative; }
+  .top {
+    display: grid; grid-template-columns: 1fr auto 1fr; align-items: center;
+    padding: 26px 40px;
+  }
+  .top .right { text-align: right; }
+  .wordmark { font: 400 22px/1 var(--serif); letter-spacing: .42em; text-transform: uppercase; padding-left: .42em; }
+
+  .center { display: grid; place-items: center; text-align: center; padding: 20px 16px; }
+  .temp {
+    position: relative;
+    display: inline-block;
+    margin: 0;
+    font: 500 clamp(150px, 24vw, 310px)/.84 var(--serif);
+    font-variation-settings: "opsz" 28;   /* kräftigere Haarstriche, besser lesbar */
+    letter-spacing: -.02em;
+    text-shadow: 0 2px 6px rgba(10, 16, 24, .35), 0 8px 48px rgba(10, 16, 24, .45);
+  }
+  /* Gradzeichen hängt außen, damit die Zahl selbst exakt mittig steht */
+  .temp sup { position: absolute; left: 100%; top: .06em; font-size: .3em; line-height: 1; margin-left: .06em; }
+  .cond { font: italic 500 clamp(28px, 3.4vw, 42px)/1.2 var(--serif); margin: 22px 0 10px; text-shadow: 0 2px 18px rgba(10, 16, 24, .6); }
+  .rule { width: 56px; height: 1px; background: currentColor; opacity: .6; margin: 18px auto; }
+
+  .bottom {
+    display: flex; justify-content: space-between; align-items: flex-end; gap: 16px;
+    padding: 0 40px 30px;
+  }
+  .scroll-cue { text-decoration: none; }
+  .scroll-cue::after { content: ""; display: block; width: 1px; height: 38px; margin: 10px auto 0; background: currentColor; opacity: .6; }
+
+  /* Lade- / Fehlerzustand */
+  .note { display: none; max-width: 30ch; margin: 0 auto; }
+  :root[data-status="loading"] .note.loading,
+  :root[data-status="error"] .note.error { display: block; }
+  :root[data-status="loading"] [data-w] { opacity: .45; }
+  .note.loading::before {
+    content: ""; display: inline-block; width: 6px; height: 6px; margin-right: 10px;
+    border-radius: 50%; background: currentColor; animation: pulse 1.2s infinite;
+  }
+  @keyframes pulse { 50% { opacity: .15; } }
+  .note.error p { font: italic 400 22px/1.35 var(--serif); margin: 0 0 16px; }
+  .btn {
+    display: inline-block; padding: 11px 22px; border: 1px solid currentColor;
+    background: transparent; color: inherit; cursor: pointer;
+    font: 500 10.5px/1 var(--sans); letter-spacing: .26em; text-transform: uppercase;
+  }
+  .forced { display: none; }
+  :root[data-forced="ja"] .forced { display: inline; }
+
+  /* ---------- Bedeutung + Werte ---------- */
+  .read { max-width: 880px; margin: 0 auto; padding: 120px 24px 104px; text-align: center; }
+  .read h2 { font: 400 clamp(40px, 6vw, 74px)/1 var(--serif); margin: 20px 0 26px; }
+  .read .lead { max-width: 46ch; margin: 0 auto; color: var(--slate); }
+  .values {
+    display: grid; grid-template-columns: repeat(4, 1fr);
+    margin: 72px 0 0; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line);
+  }
+  .values div { padding: 28px 8px 26px; }
+  .values div + div { border-left: 1px solid var(--line); }
+  .values dt { color: var(--slate); }
+  .values dd { margin: 8px 0 0; font: 400 44px/1 var(--serif); }
+  .values dd small { font: 300 13px var(--sans); margin-left: 4px; color: var(--slate); }
+
+  /* ---------- Vollbild-Band mit Stunden ---------- */
+  .band {
+    position: relative;
+    min-height: 88vh;
+    background: var(--ink) url(img/a-harbour-mist.jpg) center / cover;
+    color: #F3F6F9;
+    display: flex; flex-direction: column; justify-content: space-between;
+    padding: 72px 40px 40px;
+  }
+  .band::before { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(34,48,64,.1), rgba(34,48,64,.55)); }
+  :root[data-daytime="nacht"] .band::before { background: rgba(8, 13, 20, .65); }
+  .band > * { position: relative; }
+  .band h2 { font: italic 400 clamp(34px, 4.6vw, 58px)/1.05 var(--serif); margin: 0; max-width: 12ch; }
+  .hours {
+    list-style: none; margin: 0; padding: 0;
+    display: grid; grid-template-columns: repeat(6, 1fr);
+    border-top: 1px solid rgba(243, 246, 249, .45);
+  }
+  .hours li { padding: 18px 10px 6px; text-align: center; }
+  .hours li + li { border-left: 1px solid rgba(243, 246, 249, .25); }
+  .hours .h-temp { display: block; font: 400 46px/1.05 var(--serif); }
+  .hours .h-cond { display: block; font: italic 400 15px/1.3 var(--serif); opacity: .9; }
+  .hours .h-pop { display: block; margin-top: 6px; opacity: .75; }
+  .band .empty { display: none; font: italic 400 20px var(--serif); }
+  :root[data-status="error"] .band .empty, :root[data-status="loading"] .band .empty { display: block; }
+
+  /* ---------- Licht ---------- */
+  .light { max-width: 1040px; margin: 0 auto; padding: 112px 24px 96px; text-align: center; }
+  .light h2 { font: 400 clamp(34px, 4.4vw, 52px)/1.05 var(--serif); margin: 18px 0 48px; }
+  .arc { position: relative; width: min(100%, 640px); margin: 0 auto; aspect-ratio: 2 / 1; container-type: inline-size; }
+  .arc svg { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
+  .arc path { fill: none; stroke: var(--steel); stroke-width: 1; stroke-dasharray: 2 6; }
+  .arc line { stroke: var(--line); stroke-width: 1; }
+  .sun {
+    --a: calc(180deg - var(--sun, .5) * 180deg);
+    position: absolute; left: 50%; bottom: 0;
+    width: 18px; height: 18px; margin: 0 0 -9px -9px;
+    border-radius: 50%; background: var(--ink); box-shadow: 0 0 0 8px rgba(143, 163, 184, .25);
+    transform: rotate(calc(-1 * var(--a))) translateX(50cqi) rotate(var(--a));
+    transition: transform 1.2s ease;
+  }
+  :root[data-daytime="nacht"] .sun { background: transparent; border: 1px solid var(--steel); box-shadow: none; transform: translateX(50cqi); }
+  :root[data-status="error"] .sun { display: none; }
+  .arc-labels { display: flex; justify-content: space-between; width: min(100%, 680px); margin: 18px auto 0; }
+  .arc-labels b { display: block; font: 400 30px/1.1 var(--serif); }
+  .arc-mid { margin-top: -12px; }
+  .arc-mid b { font: 400 36px/1.1 var(--serif); display: block; margin-top: 6px; }
+
+  /* ---------- Fußzeile ---------- */
+  footer { border-top: 1px solid var(--line); padding: 40px 40px 48px; font-size: 13px; color: var(--slate); }
+  footer .row { display: flex; justify-content: space-between; gap: 24px 40px; flex-wrap: wrap; }
+  footer p { margin: 0 0 6px; }
+  footer strong { color: var(--ink); font-weight: 500; }
+
+  @media (max-width: 760px) {
+    .top { padding: 18px 16px; }
+    .top .left { visibility: hidden; }
+    .wordmark { font-size: 18px; }
+    .bottom { padding: 0 16px 22px; }
+    .read { padding: 80px 16px 72px; }
+    .values { grid-template-columns: 1fr 1fr; margin-top: 48px; }
+    .values div:nth-child(3) { border-left: 0; }
+    .values div:nth-child(n+3) { border-top: 1px solid var(--line); }
+    .band { padding: 56px 16px 24px; min-height: 0; gap: 120px; }
+    .hours { grid-template-columns: repeat(3, 1fr); }
+    .hours li:nth-child(4) { border-left: 0; }
+    .hours li:nth-child(n+4) { border-top: 1px solid rgba(243, 246, 249, .25); }
+    .light { padding: 80px 16px 72px; }
+    .arc-labels b { font-size: 24px; }
+    footer { padding: 32px 16px 40px; }
+  }
+  @media (prefers-reduced-motion: reduce) { * { transition: none !important; animation: none !important; } }
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="top">
+    <span class="label left">Hamburg · 53,55° N</span>
+    <span class="wordmark">Cloudy</span>
+    <span class="label right"><span data-w="daytime">…</span> · <span data-w="time">…</span></span>
+  </div>
+
+  <div class="center">
+    <div>
+      <p class="label">Jetzt in Hamburg</p>
+      <h1 class="temp"><span data-w="temp" data-fallback="–">…</span><sup>°</sup></h1>
+      <p class="cond" data-w="cond" data-fallback="Wetter gerade nicht verfügbar">Wird geladen</p>
+      <div class="note loading label" role="status">Wetterdaten werden geladen</div>
+      <div class="note error" role="alert">
+        <p>Die Wetterdaten sind gerade nicht erreichbar.</p>
+        <button class="btn" type="button" data-retry>Neu laden</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="bottom">
+    <span class="label">Stand <span data-w="time">…</span> Uhr<br><span class="forced">Testmodus</span></span>
+    <a class="label scroll-cue" href="#heute">Heute</a>
+    <span class="label" style="text-align:right">Tief <span data-w="tmin">…</span>°<br>Hoch <span data-w="tmax">…</span>°</span>
+  </div>
+</header>
+
+<main>
+  <section class="read" id="heute">
+    <p class="label">Was das Wetter heute bedeutet</p>
+    <h2 data-w="advice" data-fallback="Hamburg, wie es ist.">Einen Moment …</h2>
+    <p class="lead" data-w="advice-text" data-fallback="Sobald die Wetterdaten wieder erreichbar sind, steht hier, was der Tag bringt.">Die aktuellen Werte für Hamburg werden abgerufen.</p>
+
+    <dl class="values">
+      <div><dt class="label">Gefühlt</dt><dd><span data-w="feels">…</span>°</dd></div>
+      <div><dt class="label">Wind <span data-w="winddir"></span></dt><dd><span data-w="wind">…</span><small>km/h</small></dd></div>
+      <div><dt class="label">Feuchte</dt><dd><span data-w="humidity">…</span><small>%</small></dd></div>
+      <div><dt class="label">Regen</dt><dd><span data-w="precip">…</span><small>mm</small></dd></div>
+    </dl>
+  </section>
+
+  <section class="band" aria-label="Die nächsten Stunden">
+    <h2>Die nächsten Stunden</h2>
+    <div>
+      <p class="empty">Die Vorhersage erscheint, sobald die Wetterdaten geladen sind.</p>
+      <ul class="hours" data-hours></ul>
+    </div>
+    <template id="hour-tpl">
+      <li><span class="label" data-h="time"></span><span class="h-temp" data-h="temp"></span><span class="h-cond" data-h="cond"></span><span class="label h-pop">Regen <span data-h="pop"></span></span></li>
+    </template>
+  </section>
+
+  <section class="light">
+    <p class="label">Licht über Hamburg</p>
+    <h2 data-w="light-title" data-fallback="Sonne und Tageslicht">Tageslicht wird berechnet …</h2>
+    <div class="arc" aria-hidden="true">
+      <svg viewBox="0 0 200 100" preserveAspectRatio="none"><path d="M0 100 A100 100 0 0 1 200 100"/><line x1="-10" y1="100" x2="210" y2="100"/></svg>
+      <span class="sun"></span>
+    </div>
+    <div class="arc-labels">
+      <span class="label">Aufgang<b class="serif" data-w="sunrise">…</b></span>
+      <span class="label arc-mid">Tageslänge<b class="serif" data-w="daylength">…</b></span>
+      <span class="label">Untergang<b class="serif" data-w="sunset">…</b></span>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="row">
+    <div>
+      <p><strong>Studienprojekt der Kunstschule Wandsbek, keine offizielle Seite.</strong></p>
+      <p>Variante A</p>
+    </div>
+    <div>
+      <p>Wetterdaten: <a href="https://open-meteo.com/" rel="noopener">Open-Meteo.com</a>, <a href="https://creativecommons.org/licenses/by/4.0/" rel="noopener">CC BY 4.0</a> – live bei jedem Aufruf.</p>
+      <p>Fotos: gemeinfrei (CC0 / Public Domain) · <a href="credits.html">Bildquellen</a></p>
+    </div>
+  </div>
+</footer>
+
+<script src="cloudy.js"></script>
+</body>
+</html>
