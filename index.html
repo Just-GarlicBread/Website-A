@@ -13,83 +13,108 @@
 </head>
 <body>
 
+<!-- 1 · Dunkler Hero: Riesenwort über Bogen-Foto -->
 <header class="hero">
-  <div class="top">
-    <span class="label left">Hamburg · 53,55° N</span>
-    <span class="wordmark">Cloudy</span>
-    <span class="label right"><span data-w="daytime">…</span> · <span data-w="time">…</span></span>
-  </div>
+  <nav class="top" aria-label="Seiten-Navigation">
+    <span class="wordmark"><i>C</i>loudy</span>
+    <span class="links">
+      <a href="#werte">Werte</a>
+      <a href="#heute">Heute</a>
+      <a href="#stunden">Stunden</a>
+      <a href="#licht">Licht</a>
+    </span>
+    <span class="clock"><span data-clock>–</span> Uhr <span class="ring" data-w="daytime">…</span></span>
+  </nav>
 
-  <div class="center">
-    <div>
-      <p class="label">Jetzt in Hamburg</p>
-      <h1 class="temp"><span data-w="temp" data-fallback="–">…</span><sup>°</sup></h1>
+  <div class="hero-grid">
+    <div class="hero-title">
+      <p class="welcome">Das Wetter in</p>
+      <h1>Ham<br><span class="indent">burg</span></h1>
+      <div class="arch" role="img" aria-label="Stimmungsbild passend zum aktuellen Wetter"></div>
+    </div>
+
+    <div class="hero-now">
+      <p class="label">Jetzt · Messung <span data-w="time">…</span> Uhr <span class="forced">· Testmodus</span></p>
+      <p class="temp"><span data-w="temp" data-fallback="–">…</span><sup>°</sup></p>
       <p class="cond" data-w="cond" data-fallback="Wetter gerade nicht verfügbar">Wird geladen</p>
+      <p class="minmax">Tief <span data-w="tmin">…</span>° &nbsp;/&nbsp; Hoch <span data-w="tmax">…</span>°</p>
+
       <div class="note loading label" role="status">Wetterdaten werden geladen</div>
       <div class="note error" role="alert">
         <p>Die Wetterdaten sind gerade nicht erreichbar.</p>
-        <button class="btn" type="button" data-retry>Neu laden</button>
+        <button class="pill" type="button" data-retry>Neu laden</button>
       </div>
     </div>
-  </div>
-
-  <div class="bottom">
-    <span class="label">Stand <span data-w="time">…</span> Uhr<br><span class="forced">Testmodus</span></span>
-    <a class="label scroll-cue" href="#heute">Heute</a>
-    <span class="label" style="text-align:right">Tief <span data-w="tmin">…</span>°<br>Hoch <span data-w="tmax">…</span>°</span>
   </div>
 </header>
 
 <main>
-  <section class="read" id="heute">
-    <p class="label">Was das Wetter heute bedeutet</p>
-    <h2 data-w="advice" data-fallback="Hamburg, wie es ist.">Einen Moment …</h2>
-    <p class="lead" data-w="advice-text" data-fallback="Sobald die Wetterdaten wieder erreichbar sind, steht hier, was der Tag bringt.">Die aktuellen Werte für Hamburg werden abgerufen.</p>
-
-    <dl class="values">
-      <div><dt class="label">Gefühlt</dt><dd><span data-w="feels">…</span>°</dd></div>
-      <div><dt class="label">Wind <span data-w="winddir"></span></dt><dd><span data-w="wind">…</span><small>km/h</small></dd></div>
-      <div><dt class="label">Feuchte</dt><dd><span data-w="humidity">…</span><small>%</small></dd></div>
-      <div><dt class="label">Regen</dt><dd><span data-w="precip">…</span><small>mm</small></dd></div>
-    </dl>
+  <!-- 2 · Nummerierte Werte mit rundem Foto -->
+  <section class="values" id="werte">
+    <div class="round" role="img" aria-label="Dunst über Felsen am Wasser"></div>
+    <ol class="value-list">
+      <li><span class="num">01</span><span class="label">Gefühlt</span><b><span data-w="feels">…</span>°</b></li>
+      <li><span class="num">02</span><span class="label">Wind aus <span data-w="winddir">…</span></span><b><span data-w="wind">…</span><small>km/h</small></b></li>
+      <li><span class="num">03</span><span class="label">Luftfeuchte</span><b><span data-w="humidity">…</span><small>%</small></b></li>
+      <li><span class="num">04</span><span class="label">Niederschlag</span><b><span data-w="precip">…</span><small>mm</small></b></li>
+    </ol>
   </section>
 
-  <section class="band" aria-label="Die nächsten Stunden">
-    <h2>Die nächsten Stunden</h2>
-    <div>
-      <p class="empty">Die Vorhersage erscheint, sobald die Wetterdaten geladen sind.</p>
-      <ul class="hours" data-hours></ul>
+  <!-- 3 · Wiederholtes Riesenwort, Foto davor -->
+  <section class="statement" id="heute">
+    <div class="stack" aria-hidden="true">
+      <span data-w="state" data-fallback="Wetter">Wetter</span>
+      <span class="outline" data-w="state" data-fallback="Wetter">Wetter</span>
+      <span data-w="state" data-fallback="Wetter">Wetter</span>
     </div>
+    <div class="portrait" role="img" aria-label="Segelschiff im Dunst"></div>
+
+    <div class="statement-text">
+      <p class="label">Was das Wetter heute bedeutet …</p>
+      <h2><i>Heute gilt:</i> <span data-w="advice" data-fallback="Hamburg, wie es ist.">Einen Moment.</span></h2>
+      <p data-w="advice-text" data-fallback="Sobald die Wetterdaten wieder erreichbar sind, steht hier, was der Tag bringt.">Die aktuellen Werte für Hamburg werden abgerufen.</p>
+    </div>
+  </section>
+
+  <!-- 4 · Mosaik: die nächsten Stunden -->
+  <section class="mosaic" id="stunden">
+    <div class="mosaic-head">
+      <p class="label">Vorhersage</p>
+      <h2>Die nächsten<br><i>Stunden</i></h2>
+      <p>Sechs Stunden für Hamburg, direkt von der Wetter-API. Wolken <span data-w="cloud">…</span> % gerade jetzt.</p>
+    </div>
+    <p class="empty">Die Vorhersage erscheint, sobald die Wetterdaten geladen sind.</p>
+    <ul class="tiles" data-hours></ul>
     <template id="hour-tpl">
-      <li><span class="label" data-h="time"></span><span class="h-temp" data-h="temp"></span><span class="h-cond" data-h="cond"></span><span class="label h-pop">Regen <span data-h="pop"></span></span></li>
+      <li><span class="label" data-h="time"></span><b data-h="temp"></b><i data-h="cond"></i><span class="label">Regen <span data-h="pop"></span></span></li>
     </template>
   </section>
 
-  <section class="light">
+  <!-- 5 · Farbband mit Riesentext: Tageslicht -->
+  <section class="light" id="licht">
     <p class="label">Licht über Hamburg</p>
     <h2 data-w="light-title" data-fallback="Sonne und Tageslicht">Tageslicht wird berechnet …</h2>
-    <div class="arc" aria-hidden="true">
-      <svg viewBox="0 0 200 100" preserveAspectRatio="none"><path d="M0 100 A100 100 0 0 1 200 100"/><line x1="-10" y1="100" x2="210" y2="100"/></svg>
-      <span class="sun"></span>
-    </div>
-    <div class="arc-labels">
-      <span class="label">Aufgang<b class="serif" data-w="sunrise">…</b></span>
-      <span class="label arc-mid">Tageslänge<b class="serif" data-w="daylength">…</b></span>
-      <span class="label">Untergang<b class="serif" data-w="sunset">…</b></span>
+    <div class="track" aria-hidden="true"><span class="sun"></span></div>
+    <div class="light-row">
+      <span><span class="label">Aufgang</span><b data-w="sunrise">…</b></span>
+      <span><span class="label">Tageslänge</span><b data-w="daylength">…</b></span>
+      <span><span class="label">Untergang</span><b data-w="sunset">…</b></span>
     </div>
   </section>
 </main>
 
 <footer>
-  <div class="row">
-    <div>
-      <p><strong>Studienprojekt der Kunstschule Wandsbek, keine offizielle Seite.</strong></p>
-      <p>Variante A</p>
-    </div>
-    <div>
-      <p>Wetterdaten: <a href="https://open-meteo.com/" rel="noopener">Open-Meteo.com</a>, <a href="https://creativecommons.org/licenses/by/4.0/" rel="noopener">CC BY 4.0</a> – live bei jedem Aufruf.</p>
-      <p>Fotos: gemeinfrei (CC0 / Public Domain) · <a href="credits.html">Bildquellen</a></p>
-    </div>
+  <div class="foot-top">
+    <span class="wordmark"><i>C</i>loudy</span>
+    <span class="circles">
+      <a href="credits.html" title="Bildquellen">Bild</a>
+      <a href="https://open-meteo.com/" rel="noopener" title="Datenquelle">Daten</a>
+      <a href="#" title="Nach oben">↑</a>
+    </span>
+  </div>
+  <div class="foot-row">
+    <p><strong>Studienprojekt der Kunstschule Wandsbek, keine offizielle Seite.</strong></p>
+    <p>Wetterdaten: <a href="https://open-meteo.com/" rel="noopener">Open-Meteo.com</a>, <a href="https://creativecommons.org/licenses/by/4.0/" rel="noopener">CC BY 4.0</a> – live bei jedem Aufruf · Fotos gemeinfrei (CC0 / PD) · <a href="credits.html">Bildquellen</a></p>
   </div>
 </footer>
 
