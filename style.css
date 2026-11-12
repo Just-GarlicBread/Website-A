@@ -39,7 +39,7 @@ body {
   margin: 0;
   background: var(--paper);
   color: var(--text);
-  font: 300 16px/1.65 var(--sans);
+  font: 400 16px/1.65 var(--sans);
   transition: background-color .8s, color .8s;
   overflow-x: hidden;
 }
@@ -89,7 +89,6 @@ i { font-family: var(--serif); font-style: italic; }
 .hero-title h1 {
   position: relative; z-index: 2;
   font: 400 clamp(110px, 15.5vw, 230px)/.86 var(--serif);
-  font-variation-settings: "opsz" 96;
   letter-spacing: -.035em;
   color: var(--on-dark);
 }
@@ -113,7 +112,6 @@ i { font-family: var(--serif); font-style: italic; }
 .temp {
   position: relative; display: inline-block; margin: 10px 0 0;
   font: 400 clamp(96px, 11vw, 168px)/.9 var(--serif);
-  font-variation-settings: "opsz" 40;
   letter-spacing: -.03em;
 }
 .temp sup { position: absolute; left: 100%; top: .05em; font-size: .32em; line-height: 1; margin-left: .04em; }
@@ -148,7 +146,7 @@ i { font-family: var(--serif); font-style: italic; }
 .value-list .num { font: 400 40px/1 var(--serif); color: var(--muted); margin-bottom: 12px; }
 .value-list .label { color: var(--muted); }
 .value-list b { font: 400 54px/1 var(--serif); }
-.value-list small { font: 300 14px var(--sans); margin-left: 4px; color: var(--muted); }
+.value-list small { font: 400 14px var(--sans); margin-left: 4px; color: var(--muted); }
 
 /* ---------- 3 · Statement ---------- */
 .statement { padding-bottom: 104px; }
@@ -156,13 +154,14 @@ i { font-family: var(--serif); font-style: italic; }
   background: var(--ink);
   color: var(--steel);
   text-align: center;
-  padding: 56px 0 0;
+  --pad: clamp(56px, 7vw, 96px);
+  padding: var(--pad) 0;
   overflow: hidden;
 }
 :root[data-daytime="nacht"] .stack { background: var(--ink-deep); }
 .stack span {
   display: block;
-  font: 400 clamp(84px, 16vw, 250px)/.84 var(--serif);
+  font: 400 clamp(84px, 16vw, 250px)/.88 var(--serif);
   text-transform: uppercase;
   letter-spacing: -.02em;
   white-space: nowrap;
@@ -172,7 +171,7 @@ i { font-family: var(--serif); font-style: italic; }
   position: relative;
   width: min(360px, 62vw);
   aspect-ratio: 4 / 5;
-  margin: calc(-1 * clamp(150px, 18vw, 280px)) auto 0;
+  margin: calc(-1 * clamp(56px, 7vw, 96px) / 2) auto 0;
   background: url(img/a-fog-schooner.jpg) center / cover;
   filter: grayscale(.35) contrast(1.05);
   box-shadow: 0 30px 60px -30px rgba(23, 33, 45, .5);
@@ -272,6 +271,22 @@ footer { background: var(--ink); color: var(--on-dark); padding: 56px 56px 40px;
 .foot-row { margin-top: 40px; padding-top: 20px; border-top: 1px solid rgba(230, 236, 242, .2); display: flex; justify-content: space-between; gap: 12px 40px; flex-wrap: wrap; opacity: .85; }
 .foot-row p { margin: 0; }
 
+/* ---------- Lesbarkeit ----------
+   Bodoni Moda hat eine optische Größe (opsz). Bei großen Größen werden die
+   Haarstriche extrem dünn. Hier wird überall der kräftigere Schnitt
+   (kleine optische Größe) verwendet, dazu etwas mehr Gewicht. */
+.hero-title h1, .temp, .stack span,
+.statement-text h2, .mosaic-head h2, .light h2,
+.value-list b, .value-list .num, .tiles b, .light-row b,
+.wordmark, .welcome, .cond, .tiles i, i, .circles a, .note.error p, .mosaic .empty {
+  font-variation-settings: "opsz" 14;
+  font-optical-sizing: none;
+}
+.hero-title h1, .temp, .stack span, .light h2 { font-weight: 500; }
+.statement-text h2, .mosaic-head h2, .value-list b, .tiles b, .light-row b, .cond { font-weight: 500; }
+.stack .outline { -webkit-text-stroke-width: 1.5px; }
+.statement-text p:last-child, .mosaic-head p:last-child { font-size: 16px; }
+
 /* ---------- Responsiv ---------- */
 @media (max-width: 900px) {
   .hero { padding: 0 16px 64px; }
@@ -287,9 +302,8 @@ footer { background: var(--ink); color: var(--on-dark); padding: 56px 56px 40px;
   .value-list li { padding: 4px 16px; }
   .value-list b { font-size: 42px; }
   .statement { padding-bottom: 72px; }
-  .stack { padding-top: 40px; }
   .stack span { font-size: 16vw; }
-  .portrait { margin-top: -15vw; width: 54vw; }
+  .portrait { width: 54vw; }
   .statement-text { margin-top: 40px; padding: 0 16px; }
   .mosaic { grid-template-columns: 1fr; }
   .mosaic-head { min-height: 0; padding: 48px 16px; }
